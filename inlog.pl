@@ -34,8 +34,20 @@ MES
 sub add_java {
   my ($filename, $message) = @_;
   tie my @lines, 'Tie::File', $filename or return 1;
+  my $count = 0;
+  my $find = 0;
+  my $function = "";
+  my $indentation = "";
   for (@lines) {
-    print "$_\n";
+    if (/((\w+)\s+(\w+)\s*\(([^)]*)\)\s*\{)/) {
+      $function = $3;
+      $lines[$count+1] =~ m/(\s*)\w*/;
+      $indentation = $1;
+      splice @lines, $count+1, 0, $indentation.$message;
+      print "$_\n";
+    }
+#    print "$_\n";
+    $count++;
   }
   untie @lines;
   return 0;
