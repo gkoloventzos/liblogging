@@ -46,7 +46,6 @@ sub add_java {
       splice @lines, $count+1, 0, $indentation.$message;
       print "$_\n";
     }
-#    print "$_\n";
     $count++;
   }
   untie @lines;
@@ -59,9 +58,7 @@ sub eachFile {
   my $fullpath = $File::Find::name;
   #remember that File::Find changes your CWD, 
   #so you can call open with just $_
-  print "$fn, $fullpath\n";
   my ($filename, $ddir, $ext) = fileparse($fullpath, qr/\.[^.]*/);
-  print "$ddir, $filename, $ext\n";
   switch ($lang) {
     case "java" {
       if ($ext eq ".java"){
