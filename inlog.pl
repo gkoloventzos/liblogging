@@ -31,7 +31,8 @@ MES
   exit 0;
 }
 
-sub add_java {
+sub add_brackets {
+  #seems that java and c files can be caught by this regex.
   my ($filename, $message) = @_;
   tie my @lines, 'Tie::File', $filename or return 1;
   my $count = 0;
@@ -63,10 +64,10 @@ sub eachFile {
   switch ($lang) {
     case "java" {
       if ($ext eq ".java"){
-        add_java($fn,$message);
+        add_brackets($fn,$message);
       }
     }
-    case "c" { next }
+    case "c" { add_brackets($fn.$message) if ($ext eq ".c" or $ext eq ".cc" or $ext eq ".cpp" $ext eq ".c++"); }
     case "python"{ next }
     case "perl" { next }
     else { print "Only java available"}
