@@ -41,9 +41,10 @@ sub add_java {
   for (@lines) {
     if (/((\w+)\s+(\w+)\s*\(([^)]*)\)\s*\{)/) {
       $function = $3;
+      #found correct indentation of next line
       $lines[$count+1] =~ m/(\s*)\w*/;
       $indentation = $1;
-      splice @lines, $count+1, 0, $indentation.$message;
+      splice @lines, $count+1, 0, $indentation."LOG.info(\"[CALLGRAPH] Function $function on $filename\");";
       print "$_\n";
     }
     $count++;
