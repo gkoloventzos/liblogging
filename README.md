@@ -19,3 +19,8 @@ file (not path).
 ```
 inlog.pl -l java -m "LOG.info(\"[CALLGRAPH] Function $function on $filename\");"
 ```
+
+
+CAUTION: As the style of coding is something personal and can be changed this
+script can miss or add strings where it should not. I will try to minimize this
+risk but you should always look a bit of yourself. May it compile.
