@@ -16,7 +16,7 @@ my @java_exts = qw(.java);
 my ($lang, $message) = "";
 my $dir = getcwd;
 my $help;
-my $file = "/etc/inslog.dat"; #file for log
+our $file = "/tmp/inslog.dat"; #file for log
 my %match_string = ( '.java' => '((\w+)\s+(\w+)\s*\(([^)]*)\)\s*\{)',
                      '.c' => '((\w+)\s+(\w+)\s*\(([^)]*)\)\s*\{)',
                      '.cpp' => '((\w+)\s+(\w+)\s*\(([^)]*)\)\s*\{)',
@@ -91,5 +91,14 @@ GetOptions ("language=s" => \$lang,
 print_help() if ($help);
 print "No language specified\n" and exit 0 if ($lang eq "");
 
+#create the file to be sure that will have output
+unless(open FILE, '>'.$file) {
+    # Die with error message
+    #   # if we can't open it.
+    die "Unable to create $file";
+}
+close FILE;
+
+#our $java_message="try {java.io.BufferedWriter out = new java.io.BufferedWriter(new java.io.FileWriter(\"$file\", true));out.write(\"[CALLGRAPG] function $function file filename $filename \");      out.close();} catch (java.io.IOException ioe) {}";
 find (\&eachFile, $dir);
 
