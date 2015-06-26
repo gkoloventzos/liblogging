@@ -58,7 +58,6 @@ sub add_log {
       $newline++ if($lines[$count+1] =~ m/super/);
       $message = "try {java.io.BufferedWriter out = new java.io.BufferedWriter(new java.io.FileWriter(\"$file\", true));out.write(\"[CALLGRAPH] function $function filename $filename \");out.close();} catch (java.io.IOException ioe) {}";
       splice @lines, $count+$newline, 0, $indentation.$message;
-      print "$_\n";
     }
     $count++;
   }
@@ -74,11 +73,7 @@ sub eachFile {
   #so you can call open with just $_
   my ($filename, $ddir, $ext) = fileparse($fullpath, qr/\.[^.]*/);
   switch ($lang) {
-    case "java" {
-      if ($ext eq ".java"){
-        add_log($fn,$message, $ext);
-      }
-    }
+    case "java" { add_log($fn,$message, $ext) if ($ext eq ".java"); }
     case "c" { add_log($fn,$message,$ext) if ($ext eq ".c" or $ext eq ".cc" or $ext eq ".cpp" or $ext eq ".c++"); }
     case "perl" { add_log($fn,$message,$ext) if ($ext eq ".pl" ); }
     case "python"{ add_log($fn,$message,$ext) if ($ext eq ".py" ); }
