@@ -47,14 +47,17 @@ sub add_log {
   my $find = 0;
   my $function = "";
   my $indentation = "";
+  my $newline;
   for (@lines) {
     if (/$match_string{$ext}/) {
       $function = $3;
+      $newline = 1;
       #found correct indentation of next line
       $lines[$count+1] =~ m/(\s*)\w*/;
       $indentation = $1;
-      splice @lines, $count+1, 0, $indentation.$message;
-      #splice @lines, $count+1, 0, $indentation."LOG.info(\"[CALLGRAPH] Function $function on $filename\");";
+      $newline++ if($lines[$count+1] =~ m/super/);
+      $message = "try {java.io.BufferedWriter out = new java.io.BufferedWriter(new java.io.FileWriter(\"$file\", true));out.write(\"[CALLGRAPH] function $function filename $filename \");out.close();} catch (java.io.IOException ioe) {}";
+      splice @lines, $count+$newline, 0, $indentation.$message;
       print "$_\n";
     }
     $count++;
