@@ -4,7 +4,9 @@ A perl script for inserting log messages for call path graph creation
 If perl switch is not installed:
 
 Unix like : `sudo cpan -f Switch`
+
 ------
+Message configuration
 
 You can specify the log message. All language have different print functions and
 how logging. So with the -m|--message you can specify the print message. keep in
