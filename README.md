@@ -15,3 +15,7 @@ qualified paths if you are not sure if the import is mentioned or not.
 
 You can specify $function for function name and $filename for the name of the
 file (not path).
+
+```
+inlog.pl -l java -m "LOG.info(\"[CALLGRAPH] Function $function on $filename\");"
+```
