@@ -23,6 +23,7 @@ my %match_string = ( '.java' => '((\w+)\s+(\w+)\s*\(([^)]*)\)\s*\{)',
                      '.cc' => '((\w+)\s+(\w+)\s*\(([^)]*)\)\s*\{)',
                      '.h' => '((\w+)\s+(\w+)\s*\(([^)]*)\)\s*\{)',
                      '.pl' => '((\w+)\s+(\w+)\s*(:\s*\w*(\(([^)]*)\)\s*)*|\(([^)]*)\))*\s*\{)',
+                     '.py' => '((\w+)\s+(\w+)\s*(\(([^)]*)\))*\s*:)',
                    );
 
 sub print_help {
@@ -38,7 +39,7 @@ MES
   exit 0;
 }
 
-sub add_brackets {
+sub add_log {
   #seems that java and c files can be caught by this regex.
   my ($filename, $message, $ext) = @_;
   tie my @lines, 'Tie::File', $filename or return 1;
@@ -71,12 +72,12 @@ sub eachFile {
   switch ($lang) {
     case "java" {
       if ($ext eq ".java"){
-        add_brackets($fn,$message, $ext);
+        add_log($fn,$message, $ext);
       }
     }
-    case "c" { add_brackets($fn,$message,$ext) if ($ext eq ".c" or $ext eq ".cc" or $ext eq ".cpp" or $ext eq ".c++"); }
-    case "perl" { add_brackets($fn,$message,$ext) if ($ext eq ".pl" ); }
-    case "python"{ next }
+    case "c" { add_log($fn,$message,$ext) if ($ext eq ".c" or $ext eq ".cc" or $ext eq ".cpp" or $ext eq ".c++"); }
+    case "perl" { add_log($fn,$message,$ext) if ($ext eq ".pl" ); }
+    case "python"{ add_log($fn,$message,$ext) if ($ext eq ".py" ); }
     else { print "Only java available"}
   }
 }
