@@ -17,6 +17,13 @@ my ($lang, $message) = "";
 my $dir = getcwd;
 my $help;
 my $file = "/etc/inslog.dat"; #file for log
+my %match_string = ( '.java' => '((\w+)\s+(\w+)\s*\(([^)]*)\)\s*\{)',
+                     '.c' => '((\w+)\s+(\w+)\s*\(([^)]*)\)\s*\{)',
+                     '.cpp' => '((\w+)\s+(\w+)\s*\(([^)]*)\)\s*\{)',
+                     '.cc' => '((\w+)\s+(\w+)\s*\(([^)]*)\)\s*\{)',
+                     '.h' => '((\w+)\s+(\w+)\s*\(([^)]*)\)\s*\{)',
+                     '.pl' => '((\w+)\s+(\w+)\s*(:\s*\w*(\(([^)]*)\)\s*)*|\(([^)]*)\))*\s*\{)',
+                   );
 
 sub print_help {
     my $string = <<"MES";
@@ -33,14 +40,14 @@ MES
 
 sub add_brackets {
   #seems that java and c files can be caught by this regex.
-  my ($filename, $message) = @_;
+  my ($filename, $message, $ext) = @_;
   tie my @lines, 'Tie::File', $filename or return 1;
   my $count = 0;
   my $find = 0;
   my $function = "";
   my $indentation = "";
   for (@lines) {
-    if (/((\w+)\s+(\w+)\s*\(([^)]*)\)\s*\{)/) {
+    if (/$match_string{$ext}/) {
       $function = $3;
       #found correct indentation of next line
       $lines[$count+1] =~ m/(\s*)\w*/;
@@ -64,12 +71,12 @@ sub eachFile {
   switch ($lang) {
     case "java" {
       if ($ext eq ".java"){
-        add_brackets($fn,$message);
+        add_brackets($fn,$message, $ext);
       }
     }
-    case "c" { add_brackets($fn.$message) if ($ext eq ".c" or $ext eq ".cc" or $ext eq ".cpp" $ext eq ".c++"); }
+    case "c" { add_brackets($fn,$message,$ext) if ($ext eq ".c" or $ext eq ".cc" or $ext eq ".cpp" or $ext eq ".c++"); }
+    case "perl" { add_brackets($fn,$message,$ext) if ($ext eq ".pl" ); }
     case "python"{ next }
-    case "perl" { next }
     else { print "Only java available"}
   }
 }
