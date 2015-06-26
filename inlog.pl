@@ -17,7 +17,7 @@ my ($lang, $message) = "";
 my $dir = getcwd;
 my $help;
 our $file = "/tmp/inslog.dat"; #file for log
-my %match_string = ( '.java' => '((\w+)\s+(\w+)\s*\(([^)]*)\)\s*\{)',
+my %match_string = ( '.java' => '(([\w,<,>]+)\s+(\w+)\s*\(([^)]*)\)\s*\{)',
                      '.c' => '((\w+)\s+(\w+)\s*\(([^)]*)\)\s*\{)',
                      '.cpp' => '((\w+)\s+(\w+)\s*\(([^)]*)\)\s*\{)',
                      '.cc' => '((\w+)\s+(\w+)\s*\(([^)]*)\)\s*\{)',
