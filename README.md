@@ -16,7 +16,7 @@ qualified paths if you are not sure if the import is mentioned or not.
 There are 3 place holders to be used in the message.
 With strict order:
 
-1. file: It should be used in order to open the output file (Thus it should be first)
+1. file: It should be used to open the output file (Thus it should be first)
 2. function: The called function
 3. filename: The name of the file the function resides in
 
