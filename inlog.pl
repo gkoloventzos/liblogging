@@ -49,16 +49,18 @@ sub add_log {
   my $indentation = "";
   my $newline;
   for (@lines) {
+    print $_."\n";
     if (/$match_string{$ext}/) {
+      my $bla = "";
       $function = $3;
       $newline = 1;
       #found correct indentation of next line
       $lines[$count+1] =~ m/(\s*)\w*/;
       $indentation = $1;
       $newline++ if($lines[$count+1] =~ m/super/);
-      #$message = "try {java.io.BufferedWriter out = new java.io.BufferedWriter(new java.io.FileWriter(\"$file\", true));out.write(\"[CALLGRAPH] function $function filename $filename \");out.close();} catch (java.io.IOException ioe) {}";
       $message = sprintf $message => $file, $function, $filename;
-      print $message;
+      $bla = "\n".$indentation;
+      $message =~ s/\\n/$bla/g;
       splice @lines, $count+$newline, 0, $indentation.$message;
     }
     $count++;
@@ -71,7 +73,7 @@ sub eachFile {
   my $fn = $_;
   return 0 if ($fn eq ".");
   my $fullpath = $File::Find::name;
-  #remember that File::Find changes your CWD, 
+  #remember that File::Find changes your CWD,
   #so you can call open with just $_
   my ($filename, $ddir, $ext) = fileparse($fullpath, qr/\.[^.]*/);
   switch ($lang) {
@@ -79,7 +81,7 @@ sub eachFile {
     case "c" { add_log($fn,$message,$ext) if ($ext eq ".c" or $ext eq ".cc" or $ext eq ".cpp" or $ext eq ".c++"); }
     case "perl" { add_log($fn,$message,$ext) if ($ext eq ".pl" ); }
     case "python"{ add_log($fn,$message,$ext) if ($ext eq ".py" ); }
-    else { print "Only java available"}
+    else { print "Language $lang is not supported.\n"}
   }
 }
 
@@ -90,7 +92,7 @@ GetOptions ("language=s" => \$lang,
 
 my ($script, $path) = fileparse($0);
 
-print $message;
+#print $message;
 if (not -e "$path/.place" and not $message ) {
   print "You have not specified the message for insertion\n Run: inlog -m|--message \"Your string\"\n";
   exit 0;
