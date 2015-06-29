@@ -60,10 +60,8 @@ sub add_log {
       $indentation = $1;
       $newline++ if($lines[$count+1] =~ m/super/);
       $message = sprintf $message => $file, $function, $filename;
-      print $message."\n";
       $bla = "\n".$indentation;
       $message =~ s/\\n/$bla/g;
-      print $message."\n";
       splice @lines, $count+$newline, 0, $indentation.$message;
     }
     $count++;
