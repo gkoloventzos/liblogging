@@ -13,7 +13,7 @@ use Tie::File;
 
 my @c_exts = qw(.c .cc .cpp .c++);
 my @java_exts = qw(.java);
-my ($lang, $message) = "";
+my ($lang, $message, $message_file) = "";
 my $dir = getcwd;
 my $help;
 our $file = "/tmp/inslog.dat"; #file for log
@@ -56,7 +56,9 @@ sub add_log {
       $lines[$count+1] =~ m/(\s*)\w*/;
       $indentation = $1;
       $newline++ if($lines[$count+1] =~ m/super/);
-      $message = "try {java.io.BufferedWriter out = new java.io.BufferedWriter(new java.io.FileWriter(\"$file\", true));out.write(\"[CALLGRAPH] function $function filename $filename \");out.close();} catch (java.io.IOException ioe) {}";
+      #$message = "try {java.io.BufferedWriter out = new java.io.BufferedWriter(new java.io.FileWriter(\"$file\", true));out.write(\"[CALLGRAPH] function $function filename $filename \");out.close();} catch (java.io.IOException ioe) {}";
+      $message = sprintf $message => $file, $function, $filename;
+      print $message;
       splice @lines, $count+$newline, 0, $indentation.$message;
     }
     $count++;
@@ -85,6 +87,23 @@ GetOptions ("language=s" => \$lang,
             "help"  => \$help,
             "directory=s" => \$dir,
             "message=s" => \$message,);
+
+my ($script, $path) = fileparse($0);
+
+print $message;
+if (not -e "$path/.place" and not $message ) {
+  print "You have not specified the message for insertion\n Run: inlog -m|--message \"Your string\"\n";
+  exit 0;
+}
+
+if ($message) {
+  unless(open FILE, '>'.$path.".place") { die "Unable to create .place file"; }
+  print FILE $message."\n";
+} else {
+  unless(open FILE, '<'.$path.".place") { die "Unable to create .place file"; }
+  $message = <FILE>;
+}
+close FILE;
 
 print_help() if ($help);
 print "No language specified\n" and exit 0 if ($lang eq "");
