@@ -39,7 +39,7 @@ MES
   exit 0;
 }
 
-sub add_brackets {
+sub add_log {
   #seems that java and c files can be caught by this regex.
   my ($filename, $message, $ext) = @_;
   my $bla= "";
@@ -61,7 +61,7 @@ sub add_brackets {
       $newline++ if($lines[$count+1] =~ m/super/);
       $message = sprintf $message => $file, $function, $filename;
       print $message."\n";
-      $bla = "\n".$indentation." ";
+      $bla = "\n".$indentation;
       $message =~ s/\\n/$bla/g;
       print $message."\n";
       splice @lines, $count+$newline, 0, $indentation.$message;
@@ -72,10 +72,6 @@ sub add_brackets {
   return 0;
 }
 
-sub add_log {
-  my ($filename, $message, $ext) = @_;
-}
-
 sub eachFile {
   my $fn = $_;
   return 0 if ($fn eq ".");
@@ -84,9 +80,9 @@ sub eachFile {
   #so you can call open with just $_
   my ($filename, $ddir, $ext) = fileparse($fullpath, qr/\.[^.]*/);
   switch ($lang) {
-    case "java" { add_brackets($fn,$message, $ext) if ($ext eq ".java"); }
-    case "c" { add_brackets($fn,$message,$ext) if ($ext eq ".c" or $ext eq ".cc" or $ext eq ".cpp" or $ext eq ".c++"); }
-    case "perl" { add_brackets($fn,$message,$ext) if ($ext eq ".pl" ); }
+    case "java" { add_log($fn,$message, $ext) if ($ext eq ".java"); }
+    case "c" { add_log($fn,$message,$ext) if ($ext eq ".c" or $ext eq ".cc" or $ext eq ".cpp" or $ext eq ".c++"); }
+    case "perl" { add_log($fn,$message,$ext) if ($ext eq ".pl" ); }
     case "python"{ add_log($fn,$message,$ext) if ($ext eq ".py" ); }
     else { print "Language $lang is not supported.\n"}
   }
