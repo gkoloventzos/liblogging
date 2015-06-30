@@ -52,7 +52,7 @@ sub add_log {
   my $newline;
   for (@lines) {
     if (/$match_string{$ext}/) {
-      if ($2 eq "new") {
+      if ($2 eq "new" or $lines[$count] =~ /}/) {
         $count++;
         next;
       }
@@ -70,14 +70,14 @@ sub add_log {
       }
       $indentation = $1;
       if($lines[$count+$newline] =~ m/^(\s*)super/ or $lines[$count+$newline] =~ m/^(\s*)this/) {
+        $count++ and next if ($lines[$count+$newline] =~ m/new/);
         if ( $lines[$count+$newline] =~ m/;$/) {
           $newline++;
         } else {
           $newline++;
-          while ($lines[$count+$newline] =~ m/;$/) {
+          while ($lines[$count+$newline] =~ m/.*;$/) {
             $newline++;
           }
-          $newline--;
         }
       }
       $message = sprintf $message => $file, $function, $filename;
