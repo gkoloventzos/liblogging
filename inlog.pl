@@ -60,7 +60,14 @@ sub add_log {
       $function = $3;
       $newline = 1;
       #found correct indentation of next line
-      $lines[$count+1] =~ m/(\s*)\w*/;
+      while ($lines[$count+$newline] =~ /^(\s*)$/) {
+        $newline++;
+      }
+      $lines[$count + $newline] =~ m/(\s*)\w*/;
+      if ($lines[$count + $newline] =~ m/^(\s*)}(\s*)$/) {
+        $count++;
+        next;
+      }
       $indentation = $1;
       $newline++ if($lines[$count+1] =~ m/super/);
       $message = sprintf $message => $file, $function, $filename;
