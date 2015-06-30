@@ -69,7 +69,17 @@ sub add_log {
         next;
       }
       $indentation = $1;
-      $newline++ if($lines[$count+1] =~ m/super/);
+      if($lines[$count+$newline] =~ m/super/ or $lines[$count+$newline] =~ m/^(\s*)this/) {
+        if ( $lines[$count+$newline] =~ m/;$/) {
+          $newline++;
+        } else {
+          $newline++;
+          while ($lines[$count+$newline] =~ m/;$/) {
+            $newline++;
+          }
+          $newline--;
+        }
+      }
       $message = sprintf $message => $file, $function, $filename;
       $bla = "\n".$indentation;
       $message =~ s/\\n/$bla/g;
