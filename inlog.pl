@@ -52,6 +52,10 @@ sub add_log {
   my $newline;
   for (@lines) {
     if (/$match_string{$ext}/) {
+      if ($2 eq "new") {
+        $count++;
+        next;
+      }
       $message = $msg;
       $function = $3;
       $newline = 1;
