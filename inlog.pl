@@ -68,11 +68,11 @@ sub add_log {
         return 0 if ($count+$newline == $my_lines);
       }
       $lines[$count + $newline] =~ m/(\s*)\w*/;
+      $indentation = $1;
       if ($lines[$count + $newline] =~ m/^(\s*)}(\s*)$/) {
         $count++;
         next;
       }
-      $indentation = $1;
       if($lines[$count+$newline] =~ m/^(\s*)super/ or $lines[$count+$newline] =~ m/^(\s*)this/) {
         $count++ and next if ($lines[$count+$newline] =~ m/new/);
         if ( $lines[$count+$newline] =~ m/;$/) {
