@@ -55,7 +55,7 @@ sub add_log {
   my $newline;
   for (@lines) {
     if (/$match_string{$ext}/) {
-      if ($2 eq "new" or $lines[$count] =~ /}/) {
+      if ($lines[$count] =~ /new/ or $lines[$count] =~ /}/) {
         $count++;
         next;
       }
