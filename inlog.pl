@@ -78,10 +78,10 @@ sub add_log {
         if ( $lines[$count+$newline] =~ m/;$/) {
           $newline++;
         } else {
-          $newline++;
-          while ($lines[$count+$newline] =~ m/.*;$/) {
+          while ($lines[$count+$newline] !~ m/.*;\s*$/) {
             $newline++;
           }
+          $newline++;
         }
       }
       $message = sprintf $message => $file, $function, $filename;
