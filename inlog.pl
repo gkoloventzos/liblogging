@@ -16,7 +16,9 @@ my @java_exts = qw(.java);
 my ($lang, $message, $message_file) = "";
 my $dir = getcwd;
 my $help;
+my @exclude;
 our $file = "/tmp/inslog.dat"; #file for log
+our $search_dir;
 my %match_string = ( '.java' => '(([\w,<,>]+)\s+(\w+)\s*\(([^)]*)\)\s*\{)',
                      '.c' => '((\w+)\s+(\w+)\s*\(([^)]*)\)\s*\{)',
                      '.cpp' => '((\w+)\s+(\w+)\s*\(([^)]*)\)\s*\{)',
@@ -97,6 +99,10 @@ sub eachFile {
   my $fullpath = $File::Find::name;
   #remember that File::Find changes your CWD,
   #so you can call open with just $_
+  my @which_found = ($fullpath =~ /($search_dir)/);
+  if ( @which_found) {
+    return 0;
+  }
   my ($filename, $ddir, $ext) = fileparse($fullpath, qr/\.[^.]*/);
   switch ($lang) {
     case "java" { add_log($fn,$message, $ext) if ($ext eq ".java"); }
@@ -110,7 +116,11 @@ sub eachFile {
 GetOptions ("language=s" => \$lang,
             "help"  => \$help,
             "directory=s" => \$dir,
-            "message=s" => \$message,);
+            "message=s" => \$message,
+            "exclude=s" => \@exclude,);
+
+@exclude = split(/,/,join(',',@exclude));
+$search_dir = join('|',@exclude);
 
 my ($script, $path) = fileparse($0);
 
