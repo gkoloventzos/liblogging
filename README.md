@@ -39,4 +39,6 @@ inlog.pl -l java -m "java.io.BufferedWriter out = new BufferedWriter(new java.io
 
 CAUTION: As the style of coding is something personal and can be changed this
 script can miss or add strings where it should not. I will try to minimize this
-risk but you should always look a bit of yourself. May it compile.
+risk but you should be aware. 
+
+_May it compile._
