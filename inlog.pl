@@ -62,19 +62,24 @@ sub add_log {
       $message = $msg;
       $function = $3;
       $newline = 1;
-      #found correct indentation of next line
+      #skip empty and commented lines
       while ($lines[$count+$newline] =~ /^(\s*)$/ or $lines[$count+$newline] =~ /^\s*\/\/.*\s*$/) {
         $newline++;
+        #exit if end of file
         return 0 if ($count+$newline == $my_lines);
       }
+      #indentation of next line
       $lines[$count + $newline] =~ m/(\s*)\w*/;
       $indentation = $1;
+      #skip one line funtions
       if ($lines[$count + $newline] =~ m/^(\s*)}(\s*)$/) {
         $count++;
         next;
       }
+      #super and this statements must be first in contructors
       if($lines[$count+$newline] =~ m/^(\s*)super/ or $lines[$count+$newline] =~ m/^(\s*)this/) {
         $count++ and next if ($lines[$count+$newline] =~ m/new/);
+        #skip multiple lines of same super statements
         if ( $lines[$count+$newline] =~ m/;$/) {
           $newline++;
         } else {
