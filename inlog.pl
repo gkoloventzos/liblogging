@@ -47,6 +47,7 @@ sub add_log {
   my $bla= "";
   my $msg = $message;
   tie my @lines, 'Tie::File', $filename or return 1;
+  my $my_lines = scalar @lines;
   my $count = 0;
   my $find = 0;
   my $function = "";
@@ -62,8 +63,9 @@ sub add_log {
       $function = $3;
       $newline = 1;
       #found correct indentation of next line
-      while ($lines[$count+$newline] =~ /^(\s*)$/) {
+      while ($lines[$count+$newline] =~ /^(\s*)$/ or $lines[$count+$newline] =~ /^\s*\/\/.*\s*$/) {
         $newline++;
+        return 0 if ($count+$newline == $my_lines);
       }
       $lines[$count + $newline] =~ m/(\s*)\w*/;
       if ($lines[$count + $newline] =~ m/^(\s*)}(\s*)$/) {
