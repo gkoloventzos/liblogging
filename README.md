@@ -6,7 +6,17 @@ If perl switch is not installed:
 Unix like : `sudo cpan -f Switch`
 
 ------
-Message configuration
+##Options
+```
+--language|-l   :select laguage
+--directoy|-d   :select directory to start search(default current)
+--message|-m    :message to put (more in next section)
+--exclude|-e    :exclude directories(multiple and comma seperated).
+--file|-f       :file to put the log(default /tmp/inslog.dat)
+--help|-h       :this message
+```
+
+##Message configuration
 
 You can specify the log message. All language have different print functions and
 how logging. So with the -m|--message you can specify the print message. keep in
