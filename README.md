@@ -12,7 +12,7 @@ Unix like : `sudo cpan -f Switch`
 --directoy|-d   :select directory to start search(default current)
 --message|-m    :message to put (more in next section)
 --exclude|-e    :exclude directories(multiple and comma seperated).
---file|-f       :file to put the log(default /tmp/inslog.dat)
+--file|-f       :output file (default /tmp/inslog.dat)
 --help|-h       :this message
 ```
 
