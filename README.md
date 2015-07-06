@@ -16,6 +16,11 @@ Unix like : `sudo cpan -f Switch`
 --help|-h       :this message
 ```
 
+##Thoughts
+```
+--input|-i      :input file for message
+```
+
 ##Message configuration
 
 You can specify the log message. All language have different print functions and
