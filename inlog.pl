@@ -17,7 +17,8 @@ my ($lang, $message, $message_file) = "";
 my $dir = getcwd;
 my $help;
 my @exclude;
-our $file = "/tmp/inslog.dat"; #file for log
+my $input;
+our $file; #file for log
 our $search_dir;
 my %match_string = ( '.java' => '(([\w,<,>]+)\s+(\w+)\s*\(([^)]*)\)\s*\{)',
                      '.c' => '((\w+)\s+(\w+)\s*\(([^)]*)\)\s*\{)',
@@ -36,6 +37,7 @@ inslog.pl: Insert a log message to create a call path graph.
     -d, --directory      directory to start searching for files
     -m, --message        insert string.
     -f, --file           file to print the messages
+    -i, --input          input file for message
 MES
   print $string;
   exit 0;
@@ -123,9 +125,13 @@ sub eachFile {
 GetOptions ("language=s" => \$lang,
             "help"  => \$help,
             "directory=s" => \$dir,
+            "file=s" -> \$file,
             "message=s" => \$message,
-            "exclude=s" => \@exclude,);
+            "exclude=s" => \@exclude,
+            "input=s" => \$input,);
 
+die "message and input option is mutual exclusive\n" if (scalar grep {defined($_) || $_ } $message, $input) > 1;
+$file = "/tmp/inslog.dat" if (not defined($file));
 @exclude = split(/,/,join(',',@exclude));
 $search_dir = join('|',@exclude);
 
