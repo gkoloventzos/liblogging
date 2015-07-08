@@ -125,7 +125,7 @@ sub eachFile {
 GetOptions ("language=s" => \$lang,
             "help"  => \$help,
             "directory=s" => \$dir,
-            "file=s" -> \$file,
+            "file=s" => \$file,
             "message=s" => \$message,
             "exclude=s" => \@exclude,
             "input=s" => \$input,);
